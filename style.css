@@ -493,12 +493,11 @@ a:hover{ color:var(--fg); }
 
 .collab-row::before{
   color: rgba(159,191,74,.6);   /* muted */
-  .hint{
-  margin: -10px 0 18px 0;
-  font-size: 12px;
-  color: var(--muted);
+ font-size: 18px;
+    font-weight: 700;
+    opacity: 1;
 }
-}
+
 
 .collab-item[open] .collab-row::before{
   color: var(--accent);
