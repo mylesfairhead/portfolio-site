@@ -116,3 +116,21 @@ function tick() {
 
 // 12 seconds per image
 setInterval(tick, 12000);
+
+// Accordion behavior: only one collaboration open at a time
+document.addEventListener("DOMContentLoaded", () => {
+  const collabSection = document.getElementById("collaborations");
+  if (!collabSection) return;
+
+  const items = Array.from(collabSection.querySelectorAll("details.collab-item"));
+
+  items.forEach((item) => {
+    item.addEventListener("toggle", () => {
+      if (!item.open) return; // only act when opening
+
+      items.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+});
