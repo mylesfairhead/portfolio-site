@@ -62,3 +62,57 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.key === "Escape" && modal && !modal.hidden) closeVideo();
   });
 });
+
+/* Background slideshow */
+
+const backgrounds = [
+  "images/backgrounds/bg1.png",
+  "images/backgrounds/bg2.png",
+  "images/backgrounds/bg3.png",
+  "images/backgrounds/bg4.png",
+  "images/backgrounds/bg5.png",
+  "images/backgrounds/bg6.png",
+  "images/backgrounds/bg7.png",
+  "images/backgrounds/bg8.png",
+  "images/backgrounds/bg9.png",
+  "images/backgrounds/bg10.png",
+  "images/backgrounds/bg11.png",
+  "images/backgrounds/bg12.png",
+  "images/backgrounds/bg13.png",
+  "images/backgrounds/bg14.png",
+];
+
+let current = 0;
+let showingBefore = true;
+
+// Init (set both so first fade is clean)
+document.body.style.setProperty("--bg-before", `url("${backgrounds[0]}")`);
+document.body.style.setProperty("--bg-after", `url("${backgrounds[1]}")`);
+document.body.style.setProperty("--before-opacity", "1");
+document.body.style.setProperty("--after-opacity", "0");
+
+function tick() {
+  const next = (current + 1) % backgrounds.length;
+
+  if (showingBefore) {
+    document.body.style.setProperty("--bg-after", `url("${backgrounds[next]}")`);
+    document.body.style.setProperty("--after-opacity", "1");
+    document.body.style.setProperty("--before-opacity", "0");
+  } else {
+    document.body.style.setProperty("--bg-before", `url("${backgrounds[next]}")`);
+    document.body.style.setProperty("--before-opacity", "1");
+    document.body.style.setProperty("--after-opacity", "0");
+  }
+
+  // brief glitch burst
+  document.documentElement.classList.add("bg-glitch");
+  setTimeout(() => {
+    document.documentElement.classList.remove("bg-glitch");
+  }, 700);
+
+  showingBefore = !showingBefore;
+  current = next;
+}
+
+// 12 seconds per image
+setInterval(tick, 12000);
