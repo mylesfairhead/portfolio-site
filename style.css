@@ -4,6 +4,8 @@
   --muted: rgba(243,243,243,.62);
   --hair: rgba(243,243,243,.12);
   --veil: rgba(0,0,0,.55);
+
+  --accent: #9FBF4A;   /* dusty acid green */
 }
 
 *{ box-sizing:border-box; }
@@ -477,4 +479,22 @@ a:hover{ color:var(--fg); }
 
 .bg-glitch body::after{
   transform: translate3d(0,0,0) scale(1.09) skewX(0.15deg);
+}
+
+.collab-links a{
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.collab-links a:hover{
+  color: #C8F070;   /* slightly brighter hover */
+}
+
+.collab-row::before{
+  color: rgba(159,191,74,.6);   /* muted */
+}
+
+.collab-item[open] .collab-row::before{
+  color: var(--accent);
 }
