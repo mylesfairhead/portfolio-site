@@ -182,10 +182,17 @@ a:hover{ color:var(--fg); }
   border-top:1px solid var(--hair);
 }
 
-.collab-list li{
-  padding:0;
-  margin:0;
-  border-bottom:1px solid var(--hair);
+.collab-list > li.collab-client{
+  border-bottom: none !important;
+}
+
+/* Lines only between projects (li that contains details) */
+.collab-list > li:has(> details.collab-item){
+  border-bottom: 1px solid var(--hair);
+}
+
+.collab-list .collab-item:last-child{
+  border-bottom: none;
 }
 
 /* Client header row */
@@ -237,32 +244,34 @@ a:hover{ color:var(--fg); }
 .collab-list .year{ font-size:12px; color:var(--muted); text-align:right; }
 
 .dots{
-  border-bottom:1px dotted var(--hair);
+  border-bottom:0px dotted var(--hair);
   transform: translateY(-2px);  /* was -4 */
   width:160px;
 }
 
 /* Expanded panel (aligned with indent) */
 .collab-expand{
-  display:flex;
-  gap:18px;
-  padding:12px 0 18px 0;
-  border-top:1px solid var(--hair);
-  margin-left:12px; /* match indent */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 320px) 64px; /* match .collab-row */
+  column-gap: 12px;
+  row-gap: 12px;
+  padding: 8px 0 14px 0;
+  margin-left: 12px; /* keep your existing indent */
 }
 
 .collab-thumb{
-  width:240px;
-  max-width:40vw;
-  height:auto;
-  border:1px solid var(--hair);
-  display:block;
+  grid-column: 1;
+  width: 100%;
+  max-width: 360px;  /* tweak */
 }
 
-.collab-text{ max-width:620px; }
+.collab-text{
+  grid-column: 3;
+  max-width: 320px;
+}
 
 .collab-desc{
-  margin:0 0 10px 0;
+  margin:0 0 12px 0;
   font-size:13px;
   color:var(--muted);
 }
@@ -271,38 +280,14 @@ a:hover{ color:var(--fg); }
   font-size:12px;
   letter-spacing:.06em;
   text-transform:uppercase;
-}
-
-/* RESPONSIVE COLLABS */
-@media (max-width: 820px){
-  .collab-row{
-    grid-template-columns: 1fr;
-    gap:6px;
-  }
-  .dots{ display:none; }
-  .collab-list .year{ text-align:left; }
-  .collab-expand{
-    flex-direction:column;
-    margin-left:0;
-  }
-  .collab-thumb{
-    width:100%;
-    max-width:100%;
-  }
-  .collab-row.project{ padding-left:22px; }
-/* MOBILE: keep Works thumbnails as strips */
-.work-still{
-  height: 160px;        /* tweak 140–190 */
-  object-fit: cover;
-  object-position: 50% 45%;
-}
+  margin: 0;
 }
 
 /* --- Left-side accordion indicator --- */
 
 .collab-row{
   position: relative;
-  padding-left: 20px;   /* space for the + / – */
+  padding-left: 0px;   /* space for the + / – */
 }
 
 /* Default: plus */
@@ -321,6 +306,20 @@ a:hover{ color:var(--fg); }
 .collab-item[open] .collab-row::before{
   content: "–";
   color: var(--fg);
+}
+
+/* Hide role column when expanded */
+.collab-item[open] .role{
+  opacity: 0;
+}
+
+.year-slot{
+  grid-column: 4;
+  justify-self: end;
+  align-self: start;
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
 }
 
 /* Fixed top blurred bar */
@@ -358,57 +357,88 @@ a:hover{ color:var(--fg); }
   letter-spacing:.02em;
 }
 
+.collab-row::before{
+  color: rgba(159,191,74,.6);   /* muted */
+ font-size: 18px;
+    font-weight: 700;
+    opacity: 1;
+}
+
 @media (max-width: 820px){
-  .work{
-  margin: 0 0 16px 0;   /* was ~28px */
-}
 
-/* Optional: tighten title spacing slightly */
-.meta{
-  margin-top: 6px;      /* was 10px */
-}
+  /* spacing */
+  .page{ padding-top: 108px; }
+  .section{ padding: 28px 0; }
+  .section h2{ margin: 0 0 14px 0; }
+
+  /* works spacing */
+  .work{ margin: 0 0 16px 0; }
+  .meta{ margin-top: 6px; }
+
+  /* works strips */
   img.work-still{
-    height: 22vw !important;   /* scales with screen width */
+    height: 22vw !important;
     min-height: 120px !important;
-    max-height: 180px !important;
+    max-height: 120px !important;
     object-fit: cover !important;
+    object-position: 50% 45% !important;
+    display:block !important;
   }
-  .topbar{
-  padding-top: env(safe-area-inset-top); /* iPhone notch / Safari UI safety */
-}
-.topbar-inner{
-  padding: 14px 18px 12px 18px;  /* tighter */
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-.page{
-  padding-top: 110px;  /* adjust if needed */
-}
 
-/* Make name smaller but still strong */
-.brand h1{
-  font-size: 26px;
-  line-height: 1;
-  white-space: nowrap;
-  margin: 0;
-}
+  /* topbar safe area + stacked header */
+  .topbar{ padding-top: env(safe-area-inset-top); }
 
-/* Keep nav horizontal + smaller */
-.anchors{
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
-  gap: 18px;
-  width: 100%;
-}
+  .topbar-inner{
+    padding: 14px 18px 12px 18px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
 
-.anchors a{
-  font-size: 11px;
-  letter-spacing: .18em;
-  margin-left: 0;
-  white-space: nowrap;
-}
+  .brand h1{
+    font-size: 26px;
+    line-height: 1;
+    white-space: nowrap;
+    margin: 0;
+  }
+
+  .anchors{
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    width: 100%;
+  }
+
+  .anchors a{
+    font-size: 11px;
+    letter-spacing: .18em;
+    margin-left: 0;
+    white-space: nowrap;
+  }
+
+  /* collabs layout */
+  .collab-row{
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .dots{ display:none; }
+  .collab-list .year{ text-align:left; }
+
+  /* project summary indent + indicator lane */
+  .collab-row.project{ padding-left: 28px; }
+  .collab-row::before{ left: 6px; }
+
+  /* expanded content indented further than summary */
+  .collab-expand{
+    flex-direction: column;
+    margin-left: 44px;
+  }
+
+  .collab-thumb{
+    width: 100%;
+    max-width: 320px;
+  }
 }
 
 /* --- HARD OVERRIDE: MODAL MUST COVER SCREEN --- */
@@ -490,14 +520,6 @@ a:hover{ color:var(--fg); }
 .collab-links a:hover{
   color: #C8F070;   /* slightly brighter hover */
 }
-
-.collab-row::before{
-  color: rgba(159,191,74,.6);   /* muted */
- font-size: 18px;
-    font-weight: 700;
-    opacity: 1;
-}
-
 
 .collab-item[open] .collab-row::before{
   color: var(--accent);

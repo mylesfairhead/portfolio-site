@@ -134,3 +134,44 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+// Move year from summary row into expanded row when open (no duplicates)
+document.addEventListener("DOMContentLoaded", () => {
+  const collab = document.getElementById("collaborations");
+  if (!collab) return;
+
+  collab.querySelectorAll("details.collab-item").forEach((item) => {
+    const summary = item.querySelector("summary");
+    const expand = item.querySelector(".collab-expand");
+    if (!summary || !expand) return;
+
+    // Ensure a slot exists inside expanded block
+    let slot = expand.querySelector(".year-slot");
+    if (!slot) {
+      slot = document.createElement("div");
+      slot.className = "year-slot";
+      expand.appendChild(slot);
+    }
+
+    const year = summary.querySelector(".year");
+    if (!year) return;
+
+    // Create anchor so we always restore correctly
+    const anchor = document.createComment("year-anchor");
+    year.parentNode.insertBefore(anchor, year);
+
+    function updateYearPosition() {
+      if (item.open) {
+        slot.appendChild(year);
+      } else {
+        anchor.parentNode.insertBefore(year, anchor.nextSibling);
+      }
+    }
+
+    // Run once on load
+    updateYearPosition();
+
+    // Run on toggle
+    item.addEventListener("toggle", updateYearPosition);
+  });
+});
