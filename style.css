@@ -431,13 +431,16 @@ a:hover{ color:var(--fg); }
 
   /* expanded content indented further than summary */
   .collab-expand{
+    display: flex;          
     flex-direction: column;
     margin-left: 44px;
   }
 
   .collab-thumb{
+    display: block;
     width: 100%;
     max-width: 320px;
+    height: auto;         
   }
 }
 
